@@ -1,3 +1,5 @@
+import { cssBundleHref } from "@remix-run/css-bundle";
+import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -5,21 +7,16 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
-import type { MetaFunction } from "remix";
-import antdcss from "antd/dist/antd.min.css";
-// import styles from "~/styles/tailwind.css";
+} from "@remix-run/react";
 
-export function links() {
-  return [
-    // { rel: "stylesheet", href: styles },
-    { rel: "stylesheet", href: antdcss },
-  ];
-}
+import reset from "@unocss/reset/tailwind.css";
+import unocss from "~/uno.css";
 
-export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
-};
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: reset },
+  { rel: "stylesheet", href: unocss },
+  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+];
 
 export default function App() {
   return (
@@ -31,12 +28,10 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <div className="container mx-auto px-4 bg-gray-50">
-          <Outlet />
-          <ScrollRestoration />
-        </div>
+        <Outlet />
+        <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        <LiveReload />
       </body>
     </html>
   );

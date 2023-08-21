@@ -1,4 +1,4 @@
-import { Outlet, Link, useLoaderData } from "remix";
+import { Outlet, Link, useLoaderData } from "@remix-run/react";
 import { Table } from "antd";
 import {
   getApps,

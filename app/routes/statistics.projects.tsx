@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto";
 import { useEffect, useRef } from "react";
-import { useLoaderData } from "remix";
+import { useLoaderData } from "@remix-run/react";
 import { Table, Typography } from "antd";
 
 import { getStatistics } from "~/code/services";
@@ -64,6 +64,7 @@ export default function Admin() {
   ];
 
   useEffect(() => {
+    let chart: Chart;
     if (ref.current) {
       const dataSet = apps.reduce(
         (prev: any, curr: any) => {
@@ -78,7 +79,7 @@ export default function Admin() {
         { labels: [], added: [], removed: [], total: [] }
       );
 
-      const chat = new Chart(ref.current, {
+      chart = new Chart(ref.current, {
         type: "bar",
         data: {
           labels: dataSet.labels,
@@ -105,6 +106,9 @@ export default function Admin() {
         },
       });
     }
+    return () => {
+      chart?.destroy();
+    };
   }, []);
 
   return (

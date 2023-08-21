@@ -1,48 +1,41 @@
 {
   "private": true,
-  "name": "remix-app-template",
-  "description": "",
-  "license": "",
+  "sideEffects": false,
   "scripts": {
-    "build": "npm run build:css && remix build",
-    "build:css": "postcss styles --base styles --dir app/styles --env production",
-    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
-    "dev:css": "postcss styles --base styles --dir app/styles -w",
-    "postinstall": "remix setup node",
-    "start": "remix-serve build"
+    "build": "prisma generate && concurrently \"pnpm run build:css\" \"remix build\"",
+    "build:css": "unocss app/**/*.tsx --out-file=app/uno.css",
+    "dev": "concurrently \"pnpm run dev:css\" \"remix dev\"",
+    "dev:css": "unocss app/**/*.tsx --out-file=app/uno.css --watch",
+    "start": "remix-serve build",
+    "typecheck": "tsc"
   },
   "dependencies": {
-    "@prisma/client": "^3.7.0",
-    "@remix-run/react": "^1.1.1",
-    "@remix-run/serve": "^1.1.1",
-    "@types/marked": "^4.0.1",
-    "antd": "^4.18.2",
-    "chart.js": "^3.7.0",
-    "clsx": "^1.1.1",
-    "front-matter": "^4.0.2",
-    "got": "10.7.0",
-    "marked": "^4.0.8",
-    "query-string": "^7.0.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "remix": "^1.1.1",
-    "tiny-invariant": "^1.2.0"
+    "@prisma/client": "^5.1.1",
+    "@remix-run/css-bundle": "^1.19.3",
+    "@remix-run/node": "^1.19.3",
+    "@remix-run/react": "^1.19.3",
+    "@remix-run/serve": "^1.19.3",
+    "@unocss/reset": "^0.55.2",
+    "antd": "^5.8.4",
+    "chart.js": "^4.3.3",
+    "isbot": "^3.6.13",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.1.1",
-    "@types/react": "^17.0.24",
-    "@types/react-dom": "^17.0.9",
-    "autoprefixer": "^10.4.0",
-    "concurrently": "^6.5.1",
-    "esbuild-register": "^3.2.1",
-    "postcss": "^8.4.5",
-    "postcss-cli": "^9.1.0",
-    "prisma": "^3.7.0",
-    "tailwindcss": "^3.0.7",
-    "typescript": "^4.1.2"
+    "@remix-run/dev": "^1.19.3",
+    "@remix-run/eslint-config": "^1.19.3",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "@unocss/cli": "^0.55.2",
+    "@unocss/preset-uno": "^0.55.2",
+    "concurrently": "^8.2.0",
+    "eslint": "^8.47.0",
+    "prisma": "^5.1.1",
+    "typescript": "^5.1.6",
+    "unocss": "^0.55.2"
   },
   "engines": {
-    "node": ">=14"
-  },
-  "sideEffects": false
+    "node": ">=18.0.0"
+  }
 }

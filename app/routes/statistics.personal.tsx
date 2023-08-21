@@ -1,71 +1,18 @@
 import Chart from "chart.js/auto";
 import { useEffect, useRef } from "react";
-import { useLoaderData } from "remix";
+import { useLoaderData } from "@remix-run/react";
 import { Table, Typography } from "antd";
-
-import { getStatistics } from "~/code/services";
-
-const projects = [
-  "sso",
-  "oagw",
-  "bs-ds",
-  "effe",
-  "crm",
-  "sales",
-  "luban",
-  "ticket",
-  "crm",
-  "ugc",
-  "message",
-  "call",
-  "monitor",
-  "umi-plugin-extract-auth",
-];
+import { getUserStatistics } from "~/code/services";
 
 export const loader = async () => {
-  const data = await getStatistics({ email: ["wangqihan", "whenhan"] });
-
-  return data.filter((c) => c.total > 100);
+  return await getUserStatistics();
 };
 
 export default function Admin() {
   const apps = useLoaderData<any>();
-
   const ref = useRef<any>();
-
-  const columns = [
-    {
-      title: "序号",
-      dataIndex: "id",
-      render: (_: any, row: any, index: number) => index + 1,
-    },
-    // { title: "应用ID", dataIndex: "pid" },
-    { title: "应用名称", dataIndex: "name" },
-    // { title: "应用描述", dataIndex: "description" },
-    {
-      title: "新增",
-      dataIndex: "added",
-      render: (v: string) => (
-        <Typography.Text type="success">{v}</Typography.Text>
-      ),
-    },
-    {
-      title: "删除",
-      dataIndex: "removed",
-      render: (v: string) => (
-        <Typography.Text type="danger">{v}</Typography.Text>
-      ),
-    },
-    {
-      title: "共计",
-      dataIndex: "total",
-      render: (v: string) => (
-        <Typography.Text type="warning">{v}</Typography.Text>
-      ),
-    },
-  ];
-
   useEffect(() => {
+    let chart: Chart;
     if (ref.current) {
       const dataSet = apps.reduce(
         (prev: any, curr: any) => {
@@ -80,7 +27,7 @@ export default function Admin() {
         { labels: [], added: [], removed: [], total: [] }
       );
 
-      const chat = new Chart(ref.current, {
+      chart = new Chart(ref.current, {
         type: "bar",
         data: {
           labels: dataSet.labels,
@@ -107,18 +54,52 @@ export default function Admin() {
         },
       });
     }
+    return () => {
+      chart?.destroy();
+    };
   }, []);
+
+  const columns = [
+    {
+      title: "序号",
+      dataIndex: "id",
+      render: (_: any, row: any, index: number) => index + 1,
+    },
+    { title: "用户", dataIndex: "name" },
+    { title: "邮箱", dataIndex: "email" },
+    {
+      title: "新增",
+      dataIndex: "added",
+      render: (v: string) => (
+        <Typography.Text type="success">{v}</Typography.Text>
+      ),
+    },
+    {
+      title: "删除",
+      dataIndex: "removed",
+      render: (v: string) => (
+        <Typography.Text type="danger">{v}</Typography.Text>
+      ),
+    },
+    {
+      title: "共计",
+      dataIndex: "total",
+      render: (v: string) => (
+        <Typography.Text type="warning">{v}</Typography.Text>
+      ),
+    },
+  ];
 
   return (
     <>
       <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-          Myself code commits statistics
+          Personal code commits statistics
         </h1>
       </div>
       <canvas ref={ref} />
       <Table
-        rowKey={(r) => r.name || r.sum}
+        rowKey={(r) => r.email || r.sum}
         size="small"
         pagination={false}
         columns={columns}
