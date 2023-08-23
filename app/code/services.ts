@@ -1,5 +1,6 @@
 import { db } from "~/utils/db.server";
-import { FilterPrams, commitsMap, sum, getName } from "./utils";
+import { commitsMap, sum, getName } from "./utils";
+import type { FilterPrams } from "./utils";
 
 export async function getApps() {
   return await db.projects.findMany();
@@ -17,7 +18,6 @@ export async function getStatistics(filter?: FilterPrams) {
   });
 
   const total = commitsMap(commits, "pid", filter);
-
 
   let clean = projects.reduce((prev: any[], curr) => {
     // 全并

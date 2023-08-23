@@ -10,7 +10,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@prisma/client": "^5.1.1",
+    "@prisma/client": "^5.2.0",
     "@remix-run/css-bundle": "^1.19.3",
     "@remix-run/node": "^1.19.3",
     "@remix-run/react": "^1.19.3",
@@ -25,13 +25,13 @@
   "devDependencies": {
     "@remix-run/dev": "^1.19.3",
     "@remix-run/eslint-config": "^1.19.3",
-    "@types/react": "^18.2.20",
+    "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@unocss/cli": "^0.55.2",
     "@unocss/preset-uno": "^0.55.2",
-    "concurrently": "^8.2.0",
+    "concurrently": "^8.2.1",
     "eslint": "^8.47.0",
-    "prisma": "^5.1.1",
+    "prisma": "^5.2.0",
     "typescript": "^5.1.6",
     "unocss": "^0.55.2"
   },

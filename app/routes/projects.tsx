@@ -1,4 +1,4 @@
-import { Outlet, Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { Table } from "antd";
 import {
   getApps,
@@ -35,9 +35,9 @@ export const loader = async () => {
 };
 
 export default function Admin() {
-  const { apps, branch, commits, commit, d } = useLoaderData<any>();
+  const { apps /* branch, commits, commit, d */ } = useLoaderData<any>();
 
-  console.log(apps, branch, commits, commit, d);
+  // console.log(apps, branch, commits, commit, d);
 
   const columns = [
     { title: "应用ID", dataIndex: "id" },

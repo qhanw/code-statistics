@@ -5,22 +5,22 @@ import { Table, Typography } from "antd";
 
 import { getStatistics } from "~/code/services";
 
-const projects = [
-  "sso",
-  "oagw",
-  "bs-ds",
-  "effe",
-  "crm",
-  "sales",
-  "luban",
-  "ticket",
-  "crm",
-  "ugc",
-  "message",
-  "call",
-  "monitor",
-  "umi-plugin-extract-auth",
-];
+// const projects = [
+//   "sso",
+//   "oagw",
+//   "bs-ds",
+//   "effe",
+//   "crm",
+//   "sales",
+//   "luban",
+//   "ticket",
+//   "crm",
+//   "ugc",
+//   "message",
+//   "call",
+//   "monitor",
+//   "umi-plugin-extract-auth",
+// ];
 
 export const loader = async () => {
   const data = await getStatistics({ email: ["wangqihan", "whenhan"] });

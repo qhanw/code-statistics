@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Projects {
-  id Int @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   // 项目ID
   pid         Int    @unique
   name        String
