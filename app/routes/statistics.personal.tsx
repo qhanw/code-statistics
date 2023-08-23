@@ -92,7 +92,7 @@ export default function Admin() {
 
   return (
     <>
-      <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
+      <div className="relative z-10 flex items-baseline justify-between py-6 border-b border-gray-200">
         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
           Personal code commits statistics
         </h1>
