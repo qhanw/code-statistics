@@ -1,5 +1,4 @@
-import got from "got";
-import { stringifyUrl } from "query-string";
+import qs from "query-string";
 
 const domain = "https://git.xjjj.co/api/v4";
 const private_token = "Ppqznv_Nw-TtMAUFzhV2";
@@ -26,23 +25,21 @@ const own = [
 ];
 
 async function fetchApps({ limit: per_page, page }: any) {
-  const data: any = await got
-    .get(
-      stringifyUrl({
-        url: `${domain}/projects`,
-        query: {
-          private_token,
-          membership: true,
-          page,
-          per_page,
-          sort: "asc",
-          order_by: "name",
-          // last_activity_after: "2021-01-01 00:00:00",
-          // last_activity_before: "2021-12-31 23:59:59",
-        },
-      })
-    )
-    .json();
+  const data: any = await fetch(
+    qs.stringifyUrl({
+      url: `${domain}/projects`,
+      query: {
+        private_token,
+        membership: true,
+        page,
+        per_page,
+        sort: "asc",
+        order_by: "name",
+        // last_activity_after: "2021-01-01 00:00:00",
+        // last_activity_before: "2021-12-31 23:59:59",
+      },
+    })
+  ).then((res) => res.json());
 
   // 过滤其它数据
   const nextData = data.reduce((prev: any, curr: any) => {
@@ -98,14 +95,12 @@ export async function getApps() {
 // ------------------------------------------------
 // 获取每个项目分支
 async function fetchBranch({ limit: per_page, page, projectId }: any) {
-  const data: any = await got
-    .get(
-      stringifyUrl({
-        url: `${domain}/projects/${projectId}/repository/branches`,
-        query: { private_token, page, per_page },
-      })
-    )
-    .json();
+  const data: any = await fetch(
+    qs.stringifyUrl({
+      url: `${domain}/projects/${projectId}/repository/branches`,
+      query: { private_token, page, per_page },
+    })
+  ).then((res) => res.json());
 
   return { value: data, done: data?.length !== per_page };
 }
@@ -157,20 +152,18 @@ async function fetchProjectCommit({
   branch,
   ...params
 }: any) {
-  const data: any = await got
-    .get(
-      stringifyUrl({
-        url: `${domain}/projects/${projectId}/repository/commits`,
-        query: {
-          private_token,
-          ref_name: branch,
-          page,
-          per_page,
-          ...params,
-        },
-      })
-    )
-    .json();
+  const data: any = await fetch(
+    qs.stringifyUrl({
+      url: `${domain}/projects/${projectId}/repository/commits`,
+      query: {
+        private_token,
+        ref_name: branch,
+        page,
+        per_page,
+        ...params,
+      },
+    })
+  ).then((res) => res.json());
 
   return { value: data, done: data?.length !== per_page };
 }
@@ -227,14 +220,12 @@ export async function getAppsCommits(params: RequestCommitParams) {
 // -----------------------
 // 获取提交统计
 export async function getCommitStatistics(projectId: number, commitId: string) {
-  const data = got
-    .get(
-      stringifyUrl({
-        url: `${domain}/projects/${projectId}/repository/commits/${commitId}`,
-        query: { private_token },
-      })
-    )
-    .json();
+  const data = await fetch(
+    qs.stringifyUrl({
+      url: `${domain}/projects/${projectId}/repository/commits/${commitId}`,
+      query: { private_token },
+    })
+  ).then((res) => res.json());
 
   return data;
 }

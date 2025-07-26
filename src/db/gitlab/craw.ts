@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { db, projects, commits as dbtCommits } from "..";
 import { init } from "./init";
-
-const prisma = new PrismaClient();
 
 // 写入本地数据库
 async function write(data: any) {
@@ -9,12 +7,22 @@ async function write(data: any) {
   for (const p of data) {
     const { id, name, description, commits } = p;
 
-    const insertProject = { pid: id, name, description };
-    const proj = await prisma.projects.upsert({
-      where: { pid: id },
-      update: insertProject,
-      create: insertProject,
-    });
+    // TODO: 此处ID临时写为0
+    const insertProject = { id: 0, pid: id, name, description };
+    // const proj = await prisma.projects.upsert({
+    //   where: { pid: id },
+    //   update: insertProject,
+    //   create: insertProject,
+    // });
+
+    const proj = await db
+      .insert(projects)
+      .values(insertProject)
+      // 唯一约束字段（如主键）
+      .onConflictDoUpdate({ target: projects.pid, set: insertProject })
+      .returning()
+      .then((res) => res[0]);
+
     console.log(`Created project with id: ${proj.id}`);
 
     // 写入 commit
@@ -38,11 +46,19 @@ async function write(data: any) {
         status: c.status || "",
       };
 
-      const commit = await prisma.commits.upsert({
-        where: { cid: c.id },
-        update: insertData,
-        create: insertData,
-      });
+      // const commit = await prisma.commits.upsert({
+      //   where: { cid: c.id },
+      //   update: insertData,
+      //   create: insertData,
+      // });
+
+      const commit = await db
+        .insert(dbtCommits)
+        .values(insertData)
+        // 唯一约束字段（如主键）
+        .onConflictDoUpdate({ target: dbtCommits.cid, set: insertData })
+        .returning()
+        .then((res) => res[0]);
 
       console.log(`Created commit with id: ${commit.id}`);
     }
@@ -75,11 +91,7 @@ async function main() {
   write(data);
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
